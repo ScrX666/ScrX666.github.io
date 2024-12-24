@@ -1,0 +1,724 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jia wenfei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="整理一下PBR的细节，最近在用Opengl完全实现PBR，看了learnopengl和一些知乎高手讲解，理解了一点皮毛，在这总结一下。 直接上图：这张图总结的比较完整也很清晰  PBR分为直接光影响和间接光影响，而直接光就很直接，就受到场景中的光源影响。间接光一般来说就是环境光，learnopengl也只介绍了这个，但是我看其他资料还有GI的影响，也就是来自于其他物体反射的光。所以，我理解的是，直">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PBR">
+<meta property="og:url" content="https://scrx666.github.io/2024/12/24/PBR/index.html">
+<meta property="og:site_name" content="ScrX-飞的博客">
+<meta property="og:description" content="整理一下PBR的细节，最近在用Opengl完全实现PBR，看了learnopengl和一些知乎高手讲解，理解了一点皮毛，在这总结一下。 直接上图：这张图总结的比较完整也很清晰  PBR分为直接光影响和间接光影响，而直接光就很直接，就受到场景中的光源影响。间接光一般来说就是环境光，learnopengl也只介绍了这个，但是我看其他资料还有GI的影响，也就是来自于其他物体反射的光。所以，我理解的是，直">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/jpeg/38597961/1734085187961-fa871cba-b6e6-465c-89db-9353a0ca0597.jpeg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734418535990-61f3c4a0-0e3a-48a9-b3f2-b611d3a4b837.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734425131511-94c297a4-e7aa-4c42-9600-a354b37e0580.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734600106494-8b9fea9f-8187-441b-b242-6af35abfe5cf.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734600280926-48a8f494-77f4-4b77-aadb-f408fdd1fe0d.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734603011565-9b0bac63-fde9-4c93-8ae1-6a6a99734cb9.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734603170527-20a283fd-0016-4d62-b9ad-67fc44be7202.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734603447875-e83b3fb0-55f9-4416-92f2-4b8cc79338bf.png">
+<meta property="article:published_time" content="2024-12-24T12:11:29.000Z">
+<meta property="article:modified_time" content="2024-12-24T12:12:01.581Z">
+<meta property="article:author" content="jia wenfei">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/jpeg/38597961/1734085187961-fa871cba-b6e6-465c-89db-9353a0ca0597.jpeg">
+  
+  
+  
+  <title>PBR - ScrX-飞的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"scrx666.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-17VCMPQQM0"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fei&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="PBR"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-24 20:11" pubdate>
+          2024年12月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">PBR</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>整理一下PBR的细节，最近在用Opengl完全实现PBR，看了learnopengl和一些知乎高手讲解，理解了一点皮毛，在这总结一下。</p>
+<p>直接上图：这张图总结的比较完整也很清晰</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/jpeg/38597961/1734085187961-fa871cba-b6e6-465c-89db-9353a0ca0597.jpeg" srcset="/img/loading.gif" lazyload></p>
+<p>PBR分为直接光影响和间接光影响，而直接光就很直接，就受到场景中的光源影响。间接光一般来说就是环境光，learnopengl也只介绍了这个，但是我看其他资料还有GI的影响，也就是来自于其他物体反射的光。所以，我理解的是，直接光 &#x3D; 直接光源；间接光 &#x3D; 环境光 + GI；还有偶尔出现的自发光。同时，直接光和间接光（这里特指IBL）都是分为漫反射和镜面反射。</p>
+<h1 id="渲染方程"><a href="#渲染方程" class="headerlink" title="渲染方程"></a>渲染方程</h1><p>$ <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><br>  <msub><br>    <mi>L</mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mo>&#x3D;</mo><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <mo stretchy="false">(</mo><br>  <msub><br>    <mi>k</mi><br>    <mi>d</mi><br>  </msub><br>  <mfrac><br>    <mi>c</mi><br>    <mi>&#x03C0;<!-- π --></mi><br>  </mfrac><br>  <mo>+</mo><br>  <msub><br>    <mi>k</mi><br>    <mi>s</mi><br>  </msub><br>  <mfrac><br>    <mrow><br>      <mi>D</mi><br>      <mi>F</mi><br>      <mi>G</mi><br>    </mrow><br>    <mrow><br>      <mn>4</mn><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>n</mi><br>      <mo stretchy="false">)</mo><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>i</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>n</mi><br>      <mo stretchy="false">)</mo><br>    </mrow><br>  </mfrac><br>  <mo stretchy="false">)</mo><br>  <msub><br>    <mi>L</mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br></math><br> $</p>
+<h1 id="直接光"><a href="#直接光" class="headerlink" title="直接光"></a>直接光</h1><p>根据公式前半部分为漫反射，后半部分DFG部分为镜面反射，漫反射部分目前都为常数，所有先处理镜面反射。至于公式中的积分，因为已知场景中的光源数量，所以直接对其累加手动处理积分。最后再乘上一个NdotL完成。核心代码如下</p>
+<p><code>Lo += (kD * albedo / PI + **specular**) * radiance * NdotL; </code></p>
+<p>其中我们主要需要算的是specular，而他的计算主要就是公式的后半部分<img src="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734418535990-61f3c4a0-0e3a-48a9-b3f2-b611d3a4b837.png" srcset="/img/loading.gif" lazyload></p>
+<p>其中DFG三项的相关计算被称为BRDF项，主要使用<font style="color:rgb(34, 34, 34);">Cook-Torrance specular BRDF公式也就是这个来计算。分别计算三项。</font></p>
+<p><font style="color:rgb(34, 34, 34);">F项为Fresnel-Schlick公式</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">vec3 fresnelSchlick(float cosTheta, vec3 F0)<br>&#123;<br>    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);<br>&#125;  <br></code></pre></td></tr></table></figure>
+
+<p><font style="color:rgb(34, 34, 34);">Fresnel-Schlick近似法接收一个参数</font><code>&lt;font style=&quot;color:rgb(51, 51, 51);background-color:rgb(248, 248, 248);&quot;&gt;F0&lt;/font&gt;</code><font style="color:rgb(34, 34, 34);">，被称为0°入射角的反射率，或者说是直接(垂直)观察表面时有多少光线会被反射。 这个参数</font><code>&lt;font style=&quot;color:rgb(51, 51, 51);background-color:rgb(248, 248, 248);&quot;&gt;F0&lt;/font&gt;</code><font style="color:rgb(34, 34, 34);">会因为材料不同而不同，而且对于金属材质会带有颜色。在PBR金属流中我们简单地认为大多数的绝缘体在</font><code>&lt;font style=&quot;color:rgb(51, 51, 51);background-color:rgb(248, 248, 248);&quot;&gt;F0&lt;/font&gt;</code><font style="color:rgb(34, 34, 34);">为0.04的时候看起来视觉上是正确的，对于金属表面我们根据反射率特别地指定</font><code>&lt;font style=&quot;color:rgb(51, 51, 51);background-color:rgb(248, 248, 248);&quot;&gt;F0&lt;/font&gt;</code><font style="color:rgb(34, 34, 34);">。 </font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">vec3 F0 = vec3(0.04); <br>F0      = mix(F0, albedo, metallic);<br>vec3 F  = fresnelSchlick(max(dot(H, V), 0.0), F0);<br></code></pre></td></tr></table></figure>
+
+<p>D项为DistributionGGX<font style="color:rgb(34, 34, 34);">法线分布函数，G项为</font>GeometrySchlickGGX<font style="color:rgb(34, 34, 34);">几何遮蔽函数。</font></p>
+<p><font style="color:rgb(34, 34, 34);">（这里加入roughness是因为迪士尼和Epic经验，在几何遮蔽函数和法线分布函数中采用粗糙度的平方会让光照看起来更加自然。）</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs plain">float DistributionGGX(vec3 N, vec3 H, float roughness)<br>&#123;<br>    float a      = roughness*roughness;<br>    float a2     = a*a;<br>    float NdotH  = max(dot(N, H), 0.0);<br>    float NdotH2 = NdotH*NdotH;<br><br>    float num   = a2;<br>    float denom = (NdotH2 * (a2 - 1.0) + 1.0);<br>    denom = PI * denom * denom;<br><br>    return num / denom;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs plain">float GeometrySchlickGGX(float NdotV, float roughness)<br>&#123;<br>    float r = (roughness + 1.0);<br>    float k = (r*r) / 8.0;<br><br>    float num   = NdotV;<br>    float denom = NdotV * (1.0 - k) + k;<br><br>    return num / denom;<br>&#125;<br>float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)<br>&#123;<br>    float NdotV = max(dot(N, V), 0.0);<br>    float NdotL = max(dot(N, L), 0.0);<br>    float ggx2  = GeometrySchlickGGX(NdotV, roughness);<br>    float ggx1  = GeometrySchlickGGX(NdotL, roughness);<br><br>    return ggx1 * ggx2;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>最后即可算出specular，带入前面核心代码算出L0。</p>
+<h1 id="间接光"><a href="#间接光" class="headerlink" title="间接光"></a>间接光</h1><p>主要是介绍基于图像的照明（IBL），还是这个渲染方程。</p>
+<p>$ <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><br>  <msub><br>    <mi>L</mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mo>&#x3D;</mo><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <mo stretchy="false">(</mo><br>  <msub><br>    <mi>k</mi><br>    <mi>d</mi><br>  </msub><br>  <mfrac><br>    <mi>c</mi><br>    <mi>&#x03C0;<!-- π --></mi><br>  </mfrac><br>  <mo>+</mo><br>  <msub><br>    <mi>k</mi><br>    <mi>s</mi><br>  </msub><br>  <mfrac><br>    <mrow><br>      <mi>D</mi><br>      <mi>F</mi><br>      <mi>G</mi><br>    </mrow><br>    <mrow><br>      <mn>4</mn><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>n</mi><br>      <mo stretchy="false">)</mo><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>i</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>n</mi><br>      <mo stretchy="false">)</mo><br>    </mrow><br>  </mfrac><br>  <mo stretchy="false">)</mo><br>  <msub><br>    <mi>L</mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br></math><br> $</p>
+<p><font style="color:rgb(34, 34, 34);">我们的主要目标是计算半球 </font><font style="color:rgb(34, 34, 34);">Ω</font><font style="color:rgb(34, 34, 34);"> 上所有入射光方向 </font><font style="color:rgb(34, 34, 34);">w</font><font style="color:rgb(34, 34, 34);">i</font><font style="color:rgb(34, 34, 34);">的积分，而通过（预处理过的）环境立方体贴图，只要采样该贴图即可得到各个方向上的辐照度。</font></p>
+<p><font style="color:rgb(34, 34, 34);">仔细研究反射方程，我们发现 BRDF 的漫反射 </font><font style="color:rgb(34, 34, 34);">k</font><font style="color:rgb(34, 34, 34);">d</font><font style="color:rgb(34, 34, 34);"> 和镜面 </font><font style="color:rgb(34, 34, 34);">k</font><font style="color:rgb(34, 34, 34);">s</font><font style="color:rgb(34, 34, 34);"> 项是相互独立的，我们可以将积分分成两部分：</font></p>
+<p>$ <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><br>  <msub><br>    <mi>L</mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mo>&#x3D;</mo><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <mo stretchy="false">(</mo><br>  <msub><br>    <mi>k</mi><br>    <mi>d</mi><br>  </msub><br>  <mfrac><br>    <mi>c</mi><br>    <mi>&#x03C0;<!-- π --></mi><br>  </mfrac><br>  <mo stretchy="false">)</mo><br>  <msub><br>    <mi>L</mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo>+</mo><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <mo stretchy="false">(</mo><br>  <msub><br>    <mi>k</mi><br>    <mi>s</mi><br>  </msub><br>  <mfrac><br>    <mrow><br>      <mi>D</mi><br>      <mi>F</mi><br>      <mi>G</mi><br>    </mrow><br>    <mrow><br>      <mn>4</mn><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>n</mi><br>      <mo stretchy="false">)</mo><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>i</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>n</mi><br>      <mo stretchy="false">)</mo><br>    </mrow><br>  </mfrac><br>  <mo stretchy="false">)</mo><br>  <msub><br>    <mi>L</mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br></math><br> $</p>
+<p>前半部分的积分是漫反射，后半部分是镜面反射。</p>
+<h2 id="漫反射"><a href="#漫反射" class="headerlink" title="漫反射"></a>漫反射</h2><p><font style="color:rgb(34, 34, 34);">仔细观察漫反射积分，我们发现漫反射兰伯特项是一个常数项（颜色 c 、折射率 kd 和 </font><font style="color:rgb(34, 34, 34);">π 在整个积分是常数），不依赖于任何积分变量。基于此，我们可以将常数项移出漫反射积分：</font></p>
+<p>$ <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><br>  <msub><br>    <mi>L</mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mo>&#x3D;</mo><br>  <msub><br>    <mi>k</mi><br>    <mi>d</mi><br>  </msub><br>  <mfrac><br>    <mi>c</mi><br>    <mi>&#x03C0;<!-- π --></mi><br>  </mfrac><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <msub><br>    <mi>L</mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br></math><br> $</p>
+<p><font style="color:rgb(34, 34, 34);">这给了我们一个只依赖于 wi 的积分，这样就可以通过卷积预计算一张他在每个采样方向上的储存漫反射积分结果。这样的立方体贴图被称为</font><font style="color:green;">辐照度图。</font></p>
+<p>所以，首先肯定需要一张环境贴图也就是Cubemap，用来生成辐照度图。</p>
+<p>但是<font style="color:rgb(34, 34, 34);">我们一直使用的环境贴图是以立方体贴图形式储存——如同一个</font><a target="_blank" rel="noopener" href="https://learnopengl-cn.github.io/04%20Advanced%20OpenGL/06%20Cubemaps/">天空盒</a><font style="color:rgb(34, 34, 34);">——属于低动态范围(Low Dynamic Range, LDR)。我们直接使用各个面的图像的颜色值，其范围介于 0.0 和 1.0 之间，计算过程也是照值处理。这样虽然可能适合视觉输出，但作为物理输入参数，没有什么用处。所以我们可以使用.hdr格式的图，辐射度文件的格式（扩展名为 .hdr）存储了一张完整的立方体贴图，所有六个面数据都是浮点数，允许指定 0.0 到 1.0 范围之外的颜色值，以使光线具有正确的颜色强度。</font></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734425131511-94c297a4-e7aa-4c42-9600-a354b37e0580.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到这种图一般都是扭曲的，这张环境贴图是从球体投影到平面上，这个样子的贴图叫<font style="color:green;">等距柱状投影图</font><font style="color:rgb(34, 34, 34);">(Equirectangular Map) 。</font></p>
+<p><font style="color:rgb(34, 34, 34);">下一步我们需要把这张等距柱状投影图转换为立方体贴图（Cubemap）使用，直接使用这段纯数学三角转换代码</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs plain">#version 330 core<br>out vec4 FragColor;<br>in vec3 localPos;<br><br>uniform sampler2D equirectangularMap;<br><br>const vec2 invAtan = vec2(0.1591, 0.3183);<br>vec2 SampleSphericalMap(vec3 v)<br>&#123;<br>    vec2 uv = vec2(atan(v.z, v.x), asin(v.y));<br>    uv *= invAtan;<br>    uv += 0.5;<br>    return uv;<br>&#125;<br><br>void main()<br>&#123;       <br>    vec2 uv = SampleSphericalMap(normalize(localPos)); // make sure to normalize localPos<br>    vec3 color = texture(equirectangularMap, uv).rgb;<br><br>    FragColor = vec4(color, 1.0);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>于是，<font style="color:rgb(34, 34, 34);">有效地将等距柱状投影图映射到了立方体，但我们还需要将源HDR图像转换为立方体贴图纹理。为了实现这一点，我们必须对同一个立方体渲染六次，每次面对立方体的一个面，并用</font><a target="_blank" rel="noopener" href="https://learnopengl-cn.github.io/04%20Advanced%20OpenGL/05%20Framebuffers/">帧缓冲</a><font style="color:rgb(34, 34, 34);">对象记录其结果：</font></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> captureFBO, captureRBO;<br>glGenFramebuffers(<span class="hljs-number">1</span>, &amp;captureFBO);<br>glGenRenderbuffers(<span class="hljs-number">1</span>, &amp;captureRBO);<br><br>glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);<br>glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);<br>glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, <span class="hljs-number">512</span>, <span class="hljs-number">512</span>);<br>glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);  <br><span class="hljs-comment">//为六个面分配内存</span><br><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> envCubemap;<br>glGenTextures(<span class="hljs-number">1</span>, &amp;envCubemap);<br>glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);<br><span class="hljs-keyword">for</span> (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">6</span>; ++i)<br>&#123;<br>    <span class="hljs-comment">// note that we store each face with 16 bit floating point values</span><br>    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, <span class="hljs-number">0</span>, GL_RGB16F, <br>                 <span class="hljs-number">512</span>, <span class="hljs-number">512</span>, <span class="hljs-number">0</span>, GL_RGB, GL_FLOAT, nullptr);<br>&#125;<br>glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);<br>glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);<br>glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);<br>glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);<br>glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);<br></code></pre></td></tr></table></figure>
+
+<p>最后通过view，projection矩阵的操作将等距柱状2D纹理投影到立方体的各个面上</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c">glm::mat4 captureProjection = glm::perspective(glm::radians(<span class="hljs-number">90.0f</span>), <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.1f</span>, <span class="hljs-number">10.0f</span>);<br>glm::mat4 captureViews[] = <br>&#123;<br>   glm::lookAt(glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>), glm::vec3( <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>), glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>)),<br>   glm::lookAt(glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>), glm::vec3(<span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>), glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>)),<br>   glm::lookAt(glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>), glm::vec3( <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>), glm::vec3(<span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>)),<br>   glm::lookAt(glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>), glm::vec3( <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>), glm::vec3(<span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>)),<br>   glm::lookAt(glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>), glm::vec3( <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>), glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>)),<br>   glm::lookAt(glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>), glm::vec3( <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>), glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>))<br>&#125;;<br><br><span class="hljs-comment">// convert HDR equirectangular environment map to cubemap equivalent</span><br>equirectangularToCubemapShader.use();<br>equirectangularToCubemapShader.setInt(<span class="hljs-string">&quot;equirectangularMap&quot;</span>, <span class="hljs-number">0</span>);<br>equirectangularToCubemapShader.setMat4(<span class="hljs-string">&quot;projection&quot;</span>, captureProjection);<br>glActiveTexture(GL_TEXTURE0);<br>glBindTexture(GL_TEXTURE_2D, hdrTexture);<br><br>glViewport(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">512</span>, <span class="hljs-number">512</span>); <span class="hljs-comment">// don&#x27;t forget to configure the viewport to the capture dimensions.</span><br>glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);<br><span class="hljs-keyword">for</span> (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">6</span>; ++i)<br>&#123;<br>    equirectangularToCubemapShader.setMat4(<span class="hljs-string">&quot;view&quot;</span>, captureViews[i]);<br>    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, <br>                           GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envCubemap, <span class="hljs-number">0</span>);<br>    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);<br><br>    renderCube(); <span class="hljs-comment">// renders a 1x1 cube</span><br>&#125;<br>glBindFramebuffer(GL_FRAMEBUFFER, <span class="hljs-number">0</span>);  <br></code></pre></td></tr></table></figure>
+
+<p>在天空盒的顶点着色器设置这样一句可以确保渲染的立方体深度总是最大深度1，即任何物体都会覆盖</p>
+<p><code>&lt;font style=&quot;color:rgb(94, 102, 135);background-color:rgb(245, 247, 255);&quot;&gt;gl_Position = clipPos.xyww;&lt;/font&gt;</code></p>
+<p>最后就得到了IBL的基础环境贴图，准备工作做好了可以开始下一步预处理辐照度贴图。</p>
+<p><font style="color:rgb(34, 34, 34);">给定任何方向向量 </font><font style="color:rgb(34, 34, 34);">w</font><font style="color:rgb(34, 34, 34);">i</font><font style="color:rgb(34, 34, 34);"> ，我们可以对预计算的辐照度图采样以获取方向 wi 的总漫反射辐照度。为了确定片段上间接漫反射光的数量（辐照度），我们获取以表面法线为中心的半球的总辐照度。获取场景辐照度的方法就简化为：</font></p>
+<p><code>&lt;font style=&quot;color:rgb(94, 102, 135);background-color:rgb(245, 247, 255);&quot;&gt;vec3 irradiance = texture(irradianceMap, N);&lt;/font&gt;</code></p>
+<p>然后，渲染方程求黎曼和，将方程变成这样</p>
+<p>$ <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><br>  <msub><br>    <mi>L</mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03D5;<!-- ϕ --></mi><br>    <mi>o</mi><br>  </msub><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03B8;<!-- θ --></mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mo>&#x3D;</mo><br>  <msub><br>    <mi>k</mi><br>    <mi>d</mi><br>  </msub><br>  <mfrac><br>    <mi>c</mi><br>    <mi>&#x03C0;<!-- π --></mi><br>  </mfrac><br>  <mfrac><br>    <mn>1</mn><br>    <mrow><br>      <mi>n</mi><br>      <mn>1</mn><br>      <mi>n</mi><br>      <mn>2</mn><br>    </mrow><br>  </mfrac><br>  <munderover><br>    <mo>&#x2211;<!-- ∑ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi>&#x03D5;<!-- ϕ --></mi><br>      <mo>&#x3D;</mo><br>      <mn>0</mn><br>    </mrow><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi>n</mi><br>      <mn>1</mn><br>    </mrow><br>  </munderover><br>  <munderover><br>    <mo>&#x2211;<!-- ∑ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi>&#x03B8;<!-- θ --></mi><br>      <mo>&#x3D;</mo><br>      <mn>0</mn><br>    </mrow><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi>n</mi><br>      <mn>2</mn><br>    </mrow><br>  </munderover><br>  <msub><br>    <mi>L</mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03D5;<!-- ϕ --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03B8;<!-- θ --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mi>cos</mi><br>  <mo>&#x2061;<!-- ⁡ --></mo><br>  <mo stretchy="false">(</mo><br>  <mi>&#x03B8;<!-- θ --></mi><br>  <mo stretchy="false">)</mo><br>  <mi>sin</mi><br>  <mo>&#x2061;<!-- ⁡ --></mo><br>  <mo stretchy="false">(</mo><br>  <mi>&#x03B8;<!-- θ --></mi><br>  <mo stretchy="false">)</mo><br>  <mi>d</mi><br>  <mi>&#x03D5;<!-- ϕ --></mi><br>  <mi>d</mi><br>  <mi>&#x03B8;<!-- θ --></mi><br></math><br> $</p>
+<p>代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c">vec3 irradiance = vec3(<span class="hljs-number">0.0</span>);  <br><br>vec3 up    = vec3(<span class="hljs-number">0.0</span>, <span class="hljs-number">1.0</span>, <span class="hljs-number">0.0</span>);<br>vec3 right = cross(up, normal);<br>up         = cross(normal, right);<br><br><span class="hljs-type">float</span> sampleDelta = <span class="hljs-number">0.025</span>;<br><span class="hljs-type">float</span> nrSamples = <span class="hljs-number">0.0</span>; <br><span class="hljs-keyword">for</span>(<span class="hljs-type">float</span> phi = <span class="hljs-number">0.0</span>; phi &lt; <span class="hljs-number">2.0</span> * PI; phi += sampleDelta)<br>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">float</span> theta = <span class="hljs-number">0.0</span>; theta &lt; <span class="hljs-number">0.5</span> * PI; theta += sampleDelta)<br>    &#123;<br>        <span class="hljs-comment">// spherical to cartesian (in tangent space)</span><br>        vec3 tangentSample = vec3(<span class="hljs-built_in">sin</span>(theta) * <span class="hljs-built_in">cos</span>(phi),  <span class="hljs-built_in">sin</span>(theta) * <span class="hljs-built_in">sin</span>(phi), <span class="hljs-built_in">cos</span>(theta));<br>        <span class="hljs-comment">// tangent space to world</span><br>        vec3 sampleVec = tangentSample.x * right + tangentSample.y * up + tangentSample.z * N; <br><br>        irradiance += texture(environmentMap, sampleVec).rgb * <span class="hljs-built_in">cos</span>(theta) * <span class="hljs-built_in">sin</span>(theta);<br>        nrSamples++;<br>    &#125;<br>&#125;<br>irradiance = PI * irradiance * (<span class="hljs-number">1.0</span> / <span class="hljs-type">float</span>(nrSamples));<br></code></pre></td></tr></table></figure>
+
+<p>于是就将结果全部渲染到environmentMap作为辐照度图，后面在PBR shader中的计算将间接光漫反射部分替换为贴图采样的结果即可。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c">vec3 kS = fresnelSchlickRoughness(max(dot(N, V), <span class="hljs-number">0.0</span>), F0, roughness); <br>vec3 kD = <span class="hljs-number">1.0</span> - kS;<br>vec3 irradiance = texture(irradianceMap, N).rgb;<br>vec3 diffuse    = irradiance * albedo;<br>vec3 ambient    = (kD * diffuse) * ao; <br></code></pre></td></tr></table></figure>
+
+<h2 id="镜面反射"><a href="#镜面反射" class="headerlink" title="镜面反射"></a>镜面反射</h2><p>之前已经算过了漫反射，这次只关注后半部分-镜面反射。</p>
+<p>$ <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><br>  <msub><br>    <mi>L</mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mo>&#x3D;</mo><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <mo stretchy="false">(</mo><br>  <msub><br>    <mi>k</mi><br>    <mi>s</mi><br>  </msub><br>  <mfrac><br>    <mrow><br>      <mi>D</mi><br>      <mi>F</mi><br>      <mi>G</mi><br>    </mrow><br>    <mrow><br>      <mn>4</mn><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>n</mi><br>      <mo stretchy="false">)</mo><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>i</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>n</mi><br>      <mo stretchy="false">)</mo><br>    </mrow><br>  </mfrac><br>  <msub><br>    <mi>L</mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo>&#x3D;</mo><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <msub><br>    <mi>f</mi><br>    <mi>r</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <msub><br>    <mi>L</mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br></math><br> $</p>
+<p>接下来我们需要拆分这个式子，也就是大名鼎鼎的Split-Sum。因为有这个图1的近似式子，又因为这个式子在g（x）的值比较smooth的情况下比较准确，而brdf正好满足这个性质。<img src="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734600106494-8b9fea9f-8187-441b-b242-6af35abfe5cf.png" srcset="/img/loading.gif" lazyload alt="图1"></p>
+<p>所以我们可以安全的将镜面反射的渲染方程拆分成图2这样<img src="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734600280926-48a8f494-77f4-4b77-aadb-f408fdd1fe0d.png" srcset="/img/loading.gif" lazyload alt="图2"></p>
+<p>前面的Li项也就是Lighting项相当于对某个brdf的一个lobe区域积分再除以该区域的空积分，相当于Normalize，也就是相当于对environment map做了模糊。这样我们只需要提前准备好environment map的多层mipmap，根据roughness去查询即可得到该点的值。</p>
+<p>后半部分也就是brdf项，因为fr（brdf）的公式为</p>
+<p>$ <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><br>  <msub><br>    <mi>f</mi><br>    <mi>r</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>w</mi><br>    <mi>i</mi><br>  </msub><br>  <mo>,</mo><br>  <msub><br>    <mi>w</mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mo>&#x3D;</mo><br>  <mfrac><br>    <mrow><br>      <mi>D</mi><br>      <mi>F</mi><br>      <mi>G</mi><br>    </mrow><br>    <mrow><br>      <mn>4</mn><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>n</mi><br>      <mo stretchy="false">)</mo><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>i</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>n</mi><br>      <mo stretchy="false">)</mo><br>    </mrow><br>  </mfrac><br></math><br> $</p>
+<p>所以我们可以显示的F项也就是菲涅尔写出来，fr&#x2F;F*F</p>
+<p>该式子就变成了</p>
+<p>$ <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <mfrac><br>    <mrow><br>      <msub><br>        <mi>f</mi><br>        <mi>r</mi><br>      </msub><br>      <mo stretchy="false">(</mo><br>      <mi>p</mi><br>      <mo>,</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>i</mi><br>      </msub><br>      <mo>,</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo stretchy="false">)</mo><br>    </mrow><br>    <mrow><br>      <mi>F</mi><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo>,</mo><br>      <mi>h</mi><br>      <mo stretchy="false">)</mo><br>    </mrow><br>  </mfrac><br>  <mi>F</mi><br>  <mo stretchy="false">(</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>o</mi><br>  </msub><br>  <mo>,</mo><br>  <mi>h</mi><br>  <mo stretchy="false">)</mo><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br></math><br> $</p>
+<p>又因为F项的公式为</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734603011565-9b0bac63-fde9-4c93-8ae1-6a6a99734cb9.png" srcset="/img/loading.gif" lazyload></p>
+<p>带入式子替换F项得到</p>
+<p>$ <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <mfrac><br>    <mrow><br>      <msub><br>        <mi>f</mi><br>        <mi>r</mi><br>      </msub><br>      <mo stretchy="false">(</mo><br>      <mi>p</mi><br>      <mo>,</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>i</mi><br>      </msub><br>      <mo>,</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo stretchy="false">)</mo><br>    </mrow><br>    <mrow><br>      <mi>F</mi><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo>,</mo><br>      <mi>h</mi><br>      <mo stretchy="false">)</mo><br>    </mrow><br>  </mfrac><br>  <mo stretchy="false">(</mo><br>  <msub><br>    <mi>F</mi><br>    <mn>0</mn><br>  </msub><br>  <mo>+</mo><br>  <mo stretchy="false">(</mo><br>  <mn>1</mn><br>  <mo>&#x2212;<!-- − --></mo><br>  <msub><br>    <mi>F</mi><br>    <mn>0</mn><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <msup><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mo stretchy="false">(</mo><br>      <mn>1</mn><br>      <mo>&#x2212;<!-- − --></mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>h</mi><br>      <mo stretchy="false">)</mo><br>    </mrow><br>    <mn>5</mn><br>  </msup><br>  <mo stretchy="false">)</mo><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br></math><br> $</p>
+<p><font style="color:rgb(34, 34, 34);">让我们用 α替换 (1−ω_o⋅h)^5</font></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734603170527-20a283fd-0016-4d62-b9ad-67fc44be7202.png" srcset="/img/loading.gif" lazyload></p>
+<p>然后将+<font style="color:rgb(34, 34, 34);">α拆成两个式子</font></p>
+<p>$ <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <mfrac><br>    <mrow><br>      <msub><br>        <mi>f</mi><br>        <mi>r</mi><br>      </msub><br>      <mo stretchy="false">(</mo><br>      <mi>p</mi><br>      <mo>,</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>i</mi><br>      </msub><br>      <mo>,</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo stretchy="false">)</mo><br>    </mrow><br>    <mrow><br>      <mi>F</mi><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo>,</mo><br>      <mi>h</mi><br>      <mo stretchy="false">)</mo><br>    </mrow><br>  </mfrac><br>  <mo stretchy="false">(</mo><br>  <msub><br>    <mi>F</mi><br>    <mn>0</mn><br>  </msub><br>  <mo>&#x2217;<!-- ∗ --></mo><br>  <mo stretchy="false">(</mo><br>  <mn>1</mn><br>  <mo>&#x2212;<!-- − --></mo><br>  <mi>&#x03B1;<!-- α --></mi><br>  <mo stretchy="false">)</mo><br>  <mo stretchy="false">)</mo><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo>+</mo><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <mfrac><br>    <mrow><br>      <msub><br>        <mi>f</mi><br>        <mi>r</mi><br>      </msub><br>      <mo stretchy="false">(</mo><br>      <mi>p</mi><br>      <mo>,</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>i</mi><br>      </msub><br>      <mo>,</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo stretchy="false">)</mo><br>    </mrow><br>    <mrow><br>      <mi>F</mi><br>      <mo stretchy="false">(</mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo>,</mo><br>      <mi>h</mi><br>      <mo stretchy="false">)</mo><br>    </mrow><br>  </mfrac><br>  <mo stretchy="false">(</mo><br>  <mi>&#x03B1;<!-- α --></mi><br>  <mo stretchy="false">)</mo><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br></math><br> $</p>
+<p>最后我们就可以将前式的F0提出来</p>
+<p>$ <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><br>  <msub><br>    <mi>F</mi><br>    <mn>0</mn><br>  </msub><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <msub><br>    <mi>f</mi><br>    <mi>r</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <mo stretchy="false">(</mo><br>  <mn>1</mn><br>  <mo>&#x2212;<!-- − --></mo><br>  <msup><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mo stretchy="false">(</mo><br>      <mn>1</mn><br>      <mo>&#x2212;<!-- − --></mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>h</mi><br>      <mo stretchy="false">)</mo><br>    </mrow><br>    <mn>5</mn><br>  </msup><br>  <mo stretchy="false">)</mo><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo>+</mo><br>  <munder><br>    <mo>&#x222B;<!-- ∫ --></mo><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mi mathvariant="normal">&#x03A9;<!-- Ω --></mi><br>    </mrow><br>  </munder><br>  <msub><br>    <mi>f</mi><br>    <mi>r</mi><br>  </msub><br>  <mo stretchy="false">(</mo><br>  <mi>p</mi><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mo>,</mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>o</mi><br>  </msub><br>  <mo stretchy="false">)</mo><br>  <msup><br>    <mrow class="MJX-TeXAtom-ORD"><br>      <mo stretchy="false">(</mo><br>      <mn>1</mn><br>      <mo>&#x2212;<!-- − --></mo><br>      <msub><br>        <mi>&#x03C9;<!-- ω --></mi><br>        <mi>o</mi><br>      </msub><br>      <mo>&#x22C5;<!-- ⋅ --></mo><br>      <mi>h</mi><br>      <mo stretchy="false">)</mo><br>    </mrow><br>    <mn>5</mn><br>  </msup><br>  <mi>n</mi><br>  <mo>&#x22C5;<!-- ⋅ --></mo><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br>  <mi>d</mi><br>  <msub><br>    <mi>&#x03C9;<!-- ω --></mi><br>    <mi>i</mi><br>  </msub><br></math><br> $</p>
+<p>（除以的F项其实还在，参考Games202中的公式）</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734603447875-e83b3fb0-55f9-4416-92f2-4b8cc79338bf.png" srcset="/img/loading.gif" lazyload></p>
+<p>因此只存在cosθ和roughness的影响了，这样只需要去将RG通道存起来，用的时候查询。并且同一种类型的brdf的lut图应该是相同的。</p>
+<p>总之，split sum就将lighting项和brdf项分别独立拆开了，分别使用prefilter map和 lut图去存储他们需要的信息，这样在shading阶段只需要根据N，V，R三个方向去采样即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plain">// Split sum - specular<br>    const float MAX_REFLECTION_LOD = 4.0;<br>    vec3 prefilteredColor = textureLod(prefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;    <br>    vec2 brdf  = texture(brdfLUTTexture, vec2(max(dot(N, V), 0.0), roughness)).rg;<br>    vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>PBR</div>
+      <div>https://scrx666.github.io/2024/12/24/PBR/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>jia wenfei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/20/%E9%A3%9E%E9%A3%9E%E5%92%8C%E7%94%9C%E7%94%9C/" title="甜甜和飞飞">
+                        <span class="hidden-mobile">甜甜和飞飞</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
