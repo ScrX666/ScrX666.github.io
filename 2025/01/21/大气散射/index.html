@@ -1,0 +1,756 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jia wenfei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="[散射方程](https:&#x2F;&#x2F;zhida.zhihu.com&#x2F;search?content_id&#x3D;140962126&amp;content_type&#x3D;Article&amp;match_order&#x3D;1&amp;q&#x3D;%E6%95%A3%E5%B0%84%E6%96%B9%E7%A8%8B&amp;zhida_source&#x3D;entity) Scattering Function S **定义：**波长λ的光，在海拔 ℎ处，散射到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="t1">
+<meta property="og:url" content="https://scrx666.github.io/2025/01/21/%E5%A4%A7%E6%B0%94%E6%95%A3%E5%B0%84/index.html">
+<meta property="og:site_name" content="ScrX-飞的博客">
+<meta property="og:description" content="[散射方程](https:&#x2F;&#x2F;zhida.zhihu.com&#x2F;search?content_id&#x3D;140962126&amp;content_type&#x3D;Article&amp;match_order&#x3D;1&amp;q&#x3D;%E6%95%A3%E5%B0%84%E6%96%B9%E7%A8%8B&amp;zhida_source&#x3D;entity) Scattering Function S **定义：**波长λ的光，在海拔 ℎ处，散射到">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737429686257-b30eb6d9-5784-4c0d-a089-711a977665ba.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737430317726-054a85de-cd87-4624-a99a-4b4d036211eb.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737430675650-aa8041b3-4a00-468d-acc6-93c8a48e637b.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737431388894-b2342fd4-3da4-440d-821e-0a54e0f405a0.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737443377032-3ea02f70-fc28-460e-b987-d94886d4d922.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737444391104-b6165d99-3890-45db-80db-1b516929d84b.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737444628216-2ca1fd3d-a48a-49fb-9aeb-0b139d23b236.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737446583448-fd78badb-2c6c-48e5-89f2-99b4d93825e3.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737446977291-e7690c7b-1595-4fde-aefd-0531d3e922db.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737447287883-35745a7d-0ae7-40e0-87dd-b75fbb408d7e.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737447963833-d845a0c7-9eaf-4e31-b435-2ed510867d7b.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448219257-e11948b9-271d-4381-a268-84f2caee9724.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448251875-1e19b14b-f08a-4bf8-972c-4f70e44eede3.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448368995-b3ab6e52-0065-4b6f-b199-5f5d15a193ba.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448543916-c981c1a7-1c19-4919-9a84-ecb7d103fd3d.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448554528-83b6e917-f1f6-469e-9f1b-87241eb601fd.png">
+<meta property="article:published_time" content="2025-01-21T15:05:07.000Z">
+<meta property="article:modified_time" content="2025-01-21T15:07:44.084Z">
+<meta property="article:author" content="jia wenfei">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737429686257-b30eb6d9-5784-4c0d-a089-711a977665ba.png">
+  
+  
+  
+  <title>t1 - ScrX-飞的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"scrx666.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-17VCMPQQM0"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fei&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="t1"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-21 23:05" pubdate>
+          2025年1月21日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+<meta name="referrer" content="no-referrer" />
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">t1</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="FwCLE">[<font style="color:rgb(25, 27, 31);">散射方程</font>](https://zhida.zhihu.com/search?content_id=140962126&content_type=Article&match_order=1&q=%E6%95%A3%E5%B0%84%E6%96%B9%E7%A8%8B&zhida_source=entity)<font style="color:rgb(25, 27, 31);"> Scattering Function S</font></h1>
+**定义：**波长λ的光，在海拔 ℎ处，散射到 𝜃角度的能量百分比。  
+
+<p><font style="color:rgb(25, 27, 31);">1）大气的组成：大气中存在不同的颗粒，有大有小，光线碰到不同颗粒会有不同的散射形式。光线碰到空气中的</font><strong><font style="color:rgb(25, 27, 31);">小颗粒</font></strong><font style="color:rgb(25, 27, 31);">（空气分子）会发生Rayleigh 散射，遇到</font><strong><font style="color:rgb(25, 27, 31);">大颗粒</font></strong><font style="color:rgb(25, 27, 31);">（气溶胶，小分子与其他加大颗粒组成：灰尘等等），发生Mie散射。</font></p>
+<p><font style="color:rgb(25, 27, 31);">2）大气的密度：大气并不是一种均匀的介质，他的密度与海拔有关系。密度越大地方，散射程度越强。</font></p>
+<p><font style="color:rgb(25, 27, 31);">散射方程S相关变量参数：</font>$ S(λ，θ，h） $  </p>
+<p><strong><font style="color:rgb(25, 27, 31);">Rayleigh 的散射方程</font></strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737429686257-b30eb6d9-5784-4c0d-a089-711a977665ba.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="jc5bS">[<font style="color:rgb(25, 27, 31);">散射系数</font>](https://zhida.zhihu.com/search?content_id=140962126&content_type=Article&match_order=1&q=%E6%95%A3%E5%B0%84%E7%B3%BB%E6%95%B0&zhida_source=entity)<font style="color:rgb(25, 27, 31);"> Scattering Cefficient β</font></h1>
+  
+<p><strong>定义：</strong>散射到某方向的百分比，更准确地说散射系数描述了光散射后的能量损失百分比  </p>
+<p>散射系数相关变量参数$ β &#x3D; （λ，h） $</p>
+<p><font style="color:rgb(36, 41, 46);">散射系数</font><strong><font style="color:rgb(36, 41, 46);">只和波长、海拔高度有关</font></strong><font style="color:rgb(36, 41, 46);">，与方向无关</font></p>
+<h2 id="aIiXA"><font style="color:rgb(25, 27, 31);">Rayleigh 的散射系数</font></h2>
+![](https://cdn.nlark.com/yuque/0/2025/png/38597961/1737429965086-4c529c74-5441-4a66-a439-a95b00a9d640.png)
+
+<h2 id="CNEi0"><font style="color:rgb(25, 27, 31);">Mie 散射系数</font></h2>
+![](https://cdn.nlark.com/yuque/0/2025/png/38597961/1737429993688-f07d3532-e379-4523-a084-405e4e7e805c.png)
+
+<p><font style="color:rgb(25, 27, 31);">两种散射的密度函数是不同的，瑞丽是𝜌</font><em><font style="color:rgb(25, 27, 31);">r（h）</font></em><font style="color:rgb(25, 27, 31);">，米氏是𝜌</font><em><font style="color:rgb(25, 27, 31);">m（h）</font></em></p>
+<h2 id="J65k2"><font style="color:rgb(25, 27, 31);">简化</font></h2>
+<h3 id="gwfiM"><font style="color:rgb(25, 27, 31);">Rayleigh</font></h3>
+通常在简化时，需要把散射系数分为 **𝛽 ( 𝜆 ) 𝜌 ( ℎ )**，其中 𝛽 ( 𝜆 ) 表示海拔高度为0的散射系数，即
+
+<p> <img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737430317726-054a85de-cd87-4624-a99a-4b4d036211eb.png" srcset="/img/loading.gif" lazyload></p>
+<p>这样拆开后，前面的𝛽 ( 𝜆 ) 就是一个常数，CPU提前传给GPU，只需要计算 𝜌 ( ℎ )即可。</p>
+<h3 id="S95sN">Mie</h3>
+米氏散射的𝛽 ( 𝜆 )部分也是一个常数，<font style="color:rgb(25, 27, 31);">Henyey-Greenstein 曾预估过它的值：</font>![](https://cdn.nlark.com/yuque/0/2025/png/38597961/1737430624798-963a75f1-4db9-431b-a763-aeb841d9c4de.png)
+
+<p>因此根据波长，（<font style="color:rgb(25, 27, 31);">440、550、680nm 表示的红绿蓝光的波长）</font>可以得到常数项<img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737430675650-aa8041b3-4a00-468d-acc6-93c8a48e637b.png" srcset="/img/loading.gif" lazyload><br>这样就只剩**𝜌 ( ℎ )**了</p>
+<h1 id="Z0ghD"><font style="color:rgb(25, 27, 31);">相位方程 Phase Function γ</font></h1>
+**定义：**<font style="color:rgb(36, 41, 46);">指定方向占散射方向的百分比</font>
+
+<p>主要形式：γ(θ)，（这个符号叫gamma）</p>
+<h2 id="A0cx4">Rayleigh</h2>
+![](https://cdn.nlark.com/yuque/0/2025/png/38597961/1737431170945-22b6278e-e009-4e09-8a03-79dfd169c620.png)
+
+<p>根据该函数不难看出，<strong>光线很难沿着90°方向散射，很容易沿着原方向或反方向散射</strong></p>
+<h2 id="DaNio">Mie</h2>
+![](https://cdn.nlark.com/yuque/0/2025/png/38597961/1737431290392-509d8a9c-2997-4cba-b7c3-7066ca02b328.png)
+
+<p>几何意义</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737431388894-b2342fd4-3da4-440d-821e-0a54e0f405a0.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="EfVTZ">大气密度比例函数 <font style="color:rgb(25, 27, 31);">Atmospheric Density Ratio ρ</font></h1>
+**定义：**<font style="color:rgb(36, 41, 46);">海拔为h处的大气密度和</font>**<font style="color:rgb(36, 41, 46);">海平面处</font>**<font style="color:rgb(36, 41, 46);">的大气密度的比值。</font>
+
+<p><font style="color:rgb(36, 41, 46);">形式：</font>** **$  𝜌 ( ℎ ) &#x3D; \frac{density(h)} {density(0)} $<br>density(0)可以测算出来，但 density(h)需要计算且难度不小，因为大气的组成非常复杂，由不同压力、密度、温度的几层组成。好在瑞丽散射和米氏散射发生在较低的大气层，在这里大气密度随着高度指数衰减，可以使用一条曲线近似模拟density(h)  .</p>
+<p><font style="color:rgb(25, 27, 31);">真正在计算的时候，用到的 </font><font style="color:rgb(25, 27, 31);">ρ(h)</font><font style="color:rgb(25, 27, 31);"> 是个近似值，近视值为</font></p>
+<p>$  𝜌 ( ℎ ) &#x3D; exp({-\frac{h}{H}}) $</p>
+<p><font style="color:rgb(25, 27, 31);">这里又引入了一个H，这个H 是个啥？</font></p>
+<p><font style="color:rgb(25, 27, 31);">答：是个常量，通常称它为”</font><strong><font style="color:rgb(25, 27, 31);">scale height</font></strong><font style="color:rgb(25, 27, 31);">“，相当于是一个基准的高度。对于Rayleigh 来说，H&#x3D; 8500米。对于Mie 来说，H &#x3D; 1200米。</font></p>
+<h1 id="Fb9XF">[<font style="color:rgb(25, 27, 31);">指数衰减</font>](https://zhida.zhihu.com/search?content_id=140962126&content_type=Article&match_order=2&q=%E6%8C%87%E6%95%B0%E8%A1%B0%E5%87%8F&zhida_source=entity) <font style="color:rgb(25, 27, 31);">Exponential Decay</font></h1>
+**定义：**在散射系数β的**均匀介质**中，经过距离x在入射方向上还剩余的能量。
+
+<p>形式：$ I &#x3D; I_0exp(-βx) $</p>
+<p>推导过程：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737443377032-3ea02f70-fc28-460e-b987-d94886d4d922.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="wOQQV">[<font style="color:rgb(25, 27, 31);">大气透射率</font>](https://zhida.zhihu.com/search?content_id=140962126&content_type=Article&match_order=1&q=%E5%A4%A7%E6%B0%94%E9%80%8F%E5%B0%84%E7%8E%87&zhida_source=entity) <font style="color:rgb(25, 27, 31);">Atmospheric Transmittance</font></h1>
+**定义：**<font style="color:rgb(36, 41, 46);">光线在大气中行进一段距离后， </font>**<font style="color:rgb(36, 41, 46);">剩余的能量百分比</font>**<font style="color:rgb(36, 41, 46);">。</font>
+
+<p><font style="color:rgb(36, 41, 46);">形式：</font>$ T_{cp} &#x3D; \frac{Ip}{Ic} &#x3D; T \left( \overline { { C P } } \right) &#x3D; \exp \left{ - \sum _ { Q \in \overline { { C P } } } \beta \left( \lambda , h _ { Q } \right) d s \right} $</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737444391104-b6165d99-3890-45db-80db-1b516929d84b.png" srcset="/img/loading.gif" lazyload></p>
+<p>因为大气并不都是均匀介质，在经过大气层时，会穿过许多β不同的值。因为β中的ρ会随高度的变化而变化。</p>
+<p><strong><font style="color:rgb(25, 27, 31);">推导过程:(Is就是Ic）</font></strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737444628216-2ca1fd3d-a48a-49fb-9aeb-0b139d23b236.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="ph4M2">优化方程</h2>
+![](https://cdn.nlark.com/yuque/0/2025/png/38597961/1737445425437-093e26fa-9e9d-4e42-b402-eee13226f38b.png)
+
+<h1 id="MlRMe">光学深度 <font style="color:rgb(25, 27, 31);">OpticalDepth</font></h1>
+根据透射率方程的后半部分，被称为Dcp项，因为他是一个累加项。
+
+<p><font style="color:rgb(25, 27, 31);">它表示的是，一段距离上， 大气密度比例 </font><font style="color:rgb(25, 27, 31);">ρ(h)</font><font style="color:rgb(25, 27, 31);"> 的累积。</font></p>
+<p><font style="color:rgb(25, 27, 31);">就是把一段路径，分成n 个点，对每个点求它的 大气密度比例，然后累加。相当于做Raymarching。</font></p>
+<p><font style="color:rgb(25, 27, 31);">所以总结一下：</font>$ T_{cp} &#x3D; exp\left{−β(λ)D(CP) \right} $</p>
+<h1 id="NKY8D">最终公式推导</h1>
+光源从C点进入大气到达视线A点。
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737446583448-fd78badb-2c6c-48e5-89f2-99b4d93825e3.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737446977291-e7690c7b-1595-4fde-aefd-0531d3e922db.png" srcset="/img/loading.gif" lazyload></p>
+<p><font style="color:rgb(25, 27, 31);">因为在AB 路径上，有 路径上，有无数个点P， 都在发生类似的散射。</font></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737447287883-35745a7d-0ae7-40e0-87dd-b75fbb408d7e.png" srcset="/img/loading.gif" lazyload></p>
+<p>就有$ I_A &#x3D; I_{PA} \textstyle\sum_{P \in AB} ds $</p>
+<p>因此带入得到最终方程</p>
+<p>$ I_A &#x3D; I_C S(\lambda, \theta, h) T(CP) T(PA) \sum_{P \in AB} ds $</p>
+<h2 id="hx3tP">优化</h2>
+![](https://cdn.nlark.com/yuque/0/2025/png/38597961/1737447802765-072b4904-8318-46e4-84bc-606b9fa1c015.png)  
+因为 𝛽 ( 𝜆 ) 表示散射系数，与海拔高度无关，是个常量，且 𝛾 ( 𝜃 ) 表示相位函数，是个常量。所以可以将 𝛽 ( 𝜆 ) 𝛾 ( 𝜃 ) 这两货从散射方程中提出来，可得
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737447963833-d845a0c7-9eaf-4e31-b435-2ed510867d7b.png" srcset="/img/loading.gif" lazyload></p>
+<p>因此就剩下Tcp和Tpa了，在大气透射率中提到</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448219257-e11948b9-271d-4381-a268-84f2caee9724.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448251875-1e19b14b-f08a-4bf8-972c-4f70e44eede3.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以得到优化后的最后方程</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448368995-b3ab6e52-0065-4b6f-b199-5f5d15a193ba.png" srcset="/img/loading.gif" lazyload alt="最后方程"></p>
+<p>根据这个方程可以将其分为两部分，一部分是常量，由CPU端提前传入；另一部分是需要实时计算的 真正需要优化的是需要实时计算的部分，</p>
+<p>目前存在三个积分项 </p>
+<p>第一个积分：视线AB上存在许多颗粒产生散射 </p>
+<p>第二个积分：大气透射率，OpticalDepth CP （DCP）</p>
+<p>第三个积分：大气透射率，OpticalDepth PA （DPA）</p>
+<p>说人话就是取AB上的一个颗粒点P，计算CP的大气透射率进并累加，再计算PA的大气透射率并累加，并计算AB上其他所有的颗粒 </p>
+<p>这里还可以进一步优化为两个积分，也就是优化 𝐷 ( 𝑃 𝐴 )，因为点P是在AB上的，那么上一次积分得到的 <img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448543916-c981c1a7-1c19-4919-9a84-ecb7d103fd3d.png" srcset="/img/loading.gif" lazyload>，可以直接用于下次积分 <img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448554528-83b6e917-f1f6-469e-9f1b-87241eb601fd.png" srcset="/img/loading.gif" lazyload></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>t1</div>
+      <div>https://scrx666.github.io/2025/01/21/大气散射/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>jia wenfei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/21/t1/" title="t1">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">t1</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/24/PBR/" title="PBR">
+                        <span class="hidden-mobile">PBR</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

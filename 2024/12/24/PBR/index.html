@@ -43,7 +43,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/0615669557de718a8cb6dc4dbf928dc6.svg">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734603447875-e83b3fb0-55f9-4416-92f2-4b8cc79338bf.png">
 <meta property="article:published_time" content="2024-12-24T12:11:29.000Z">
-<meta property="article:modified_time" content="2024-12-24T12:13:23.235Z">
+<meta property="article:modified_time" content="2025-01-21T15:04:20.122Z">
 <meta property="article:author" content="jia wenfei">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/jpeg/38597961/1734085187961-fa871cba-b6e6-465c-89db-9353a0ca0597.jpeg">
@@ -239,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.7k 字
+          2.6k 字
         
       </span>
     
@@ -250,7 +250,7 @@
         
         
         
-          23 分钟
+          22 分钟
         
       </span>
     
@@ -277,7 +277,7 @@
   <main>
     
       
-
+<meta name="referrer" content="no-referrer" />
 <div class="container-fluid nopadding-x">
   <div class="row nomargin-x">
     <div class="side-col d-none d-lg-block col-lg-2">
@@ -302,11 +302,11 @@
 <h1 id="直接光"><a href="#直接光" class="headerlink" title="直接光"></a>直接光</h1><p>根据公式前半部分为漫反射，后半部分DFG部分为镜面反射，漫反射部分目前都为常数，所有先处理镜面反射。至于公式中的积分，因为已知场景中的光源数量，所以直接对其累加手动处理积分。最后再乘上一个NdotL完成。核心代码如下</p>
 <p><code>Lo += (kD * albedo / PI + **specular**) * radiance * NdotL; </code></p>
 <p>其中我们主要需要算的是specular，而他的计算主要就是公式的后半部分<img src="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734418535990-61f3c4a0-0e3a-48a9-b3f2-b611d3a4b837.png" srcset="/img/loading.gif" lazyload></p>
-<p>其中DFG三项的相关计算被称为BRDF项，主要使用<font style="color:rgb(34, 34, 34);">Cook-Torrance specular BRDF公式也就是这个来计算。分别计算三项。</font></p>
-<p><font style="color:rgb(34, 34, 34);">F项为Fresnel-Schlick公式</font></p>
+<p>其中DFG三项的相关计算被称为BRDF项，主要使用Cook-Torrance specular BRDF公式也就是这个来计算。分别计算三项。</p>
+<p>F项为Fresnel-Schlick公式</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">vec3 fresnelSchlick(float cosTheta, vec3 F0)<br>&#123;<br>    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);<br>&#125;  <br></code></pre></td></tr></table></figure>
 
-<p><font style="color:rgb(34, 34, 34);">Fresnel-Schlick近似法接收一个参数</font><code>&lt;font style=&quot;color:rgb(51, 51, 51);background-color:rgb(248, 248, 248);&quot;&gt;F0&lt;/font&gt;</code><font style="color:rgb(34, 34, 34);">，被称为0°入射角的反射率，或者说是直接(垂直)观察表面时有多少光线会被反射。 这个参数</font><code>&lt;font style=&quot;color:rgb(51, 51, 51);background-color:rgb(248, 248, 248);&quot;&gt;F0&lt;/font&gt;</code><font style="color:rgb(34, 34, 34);">会因为材料不同而不同，而且对于金属材质会带有颜色。在PBR金属流中我们简单地认为大多数的绝缘体在</font><code>&lt;font style=&quot;color:rgb(51, 51, 51);background-color:rgb(248, 248, 248);&quot;&gt;F0&lt;/font&gt;</code><font style="color:rgb(34, 34, 34);">为0.04的时候看起来视觉上是正确的，对于金属表面我们根据反射率特别地指定</font><code>&lt;font style=&quot;color:rgb(51, 51, 51);background-color:rgb(248, 248, 248);&quot;&gt;F0&lt;/font&gt;</code><font style="color:rgb(34, 34, 34);">。 </font></p>
+<p>Fresnel-Schlick近似法接收一个参数 <code>F0</code>，被称为0°入射角的反射率，或者说是直接(垂直)观察表面时有多少光线会被反射。 这个参数 <code>F0</code> 会因为材料不同而不同，而且对于金属材质会带有颜色。在PBR金属流中我们简单地认为大多数的绝缘体在 <code>F0</code> 为0.04的时候看起来视觉上是正确的，对于金属表面我们根据反射率特别地指定 <code>F0</code>。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">vec3 F0 = vec3(0.04); <br>F0      = mix(F0, albedo, metallic);<br>vec3 F  = fresnelSchlick(max(dot(H, V), 0.0), F0);<br></code></pre></td></tr></table></figure>
 
 <p>D项为DistributionGGX<font style="color:rgb(34, 34, 34);">法线分布函数，G项为</font>GeometrySchlickGGX<font style="color:rgb(34, 34, 34);">几何遮蔽函数。</font></p>
@@ -339,10 +339,9 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c">glm::mat4 captureProjection = glm::perspective(glm::radians(<span class="hljs-number">90.0f</span>), <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.1f</span>, <span class="hljs-number">10.0f</span>);<br>glm::mat4 captureViews[] = <br>&#123;<br>   glm::lookAt(glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>), glm::vec3( <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>), glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>)),<br>   glm::lookAt(glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>), glm::vec3(<span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>), glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>)),<br>   glm::lookAt(glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>), glm::vec3( <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>), glm::vec3(<span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>)),<br>   glm::lookAt(glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>), glm::vec3( <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>), glm::vec3(<span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>)),<br>   glm::lookAt(glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>), glm::vec3( <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>), glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>)),<br>   glm::lookAt(glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>), glm::vec3( <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>), glm::vec3(<span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>))<br>&#125;;<br><br><span class="hljs-comment">// convert HDR equirectangular environment map to cubemap equivalent</span><br>equirectangularToCubemapShader.use();<br>equirectangularToCubemapShader.setInt(<span class="hljs-string">&quot;equirectangularMap&quot;</span>, <span class="hljs-number">0</span>);<br>equirectangularToCubemapShader.setMat4(<span class="hljs-string">&quot;projection&quot;</span>, captureProjection);<br>glActiveTexture(GL_TEXTURE0);<br>glBindTexture(GL_TEXTURE_2D, hdrTexture);<br><br>glViewport(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">512</span>, <span class="hljs-number">512</span>); <span class="hljs-comment">// don&#x27;t forget to configure the viewport to the capture dimensions.</span><br>glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);<br><span class="hljs-keyword">for</span> (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">6</span>; ++i)<br>&#123;<br>    equirectangularToCubemapShader.setMat4(<span class="hljs-string">&quot;view&quot;</span>, captureViews[i]);<br>    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, <br>                           GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envCubemap, <span class="hljs-number">0</span>);<br>    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);<br><br>    renderCube(); <span class="hljs-comment">// renders a 1x1 cube</span><br>&#125;<br>glBindFramebuffer(GL_FRAMEBUFFER, <span class="hljs-number">0</span>);  <br></code></pre></td></tr></table></figure>
 
 <p>在天空盒的顶点着色器设置这样一句可以确保渲染的立方体深度总是最大深度1，即任何物体都会覆盖</p>
-<p><code>&lt;font style=&quot;color:rgb(94, 102, 135);background-color:rgb(245, 247, 255);&quot;&gt;gl_Position = clipPos.xyww;&lt;/font&gt;</code></p>
 <p>最后就得到了IBL的基础环境贴图，准备工作做好了可以开始下一步预处理辐照度贴图。</p>
-<p><font style="color:rgb(34, 34, 34);">给定任何方向向量 </font><font style="color:rgb(34, 34, 34);">w</font><font style="color:rgb(34, 34, 34);">i</font><font style="color:rgb(34, 34, 34);"> ，我们可以对预计算的辐照度图采样以获取方向 wi 的总漫反射辐照度。为了确定片段上间接漫反射光的数量（辐照度），我们获取以表面法线为中心的半球的总辐照度。获取场景辐照度的方法就简化为：</font></p>
-<p><code>&lt;font style=&quot;color:rgb(94, 102, 135);background-color:rgb(245, 247, 255);&quot;&gt;vec3 irradiance = texture(irradianceMap, N);&lt;/font&gt;</code></p>
+<p>给定任何方向向量 wi，我们可以对预计算的辐照度图采样以获取方向 wi 的总漫反射辐照度。为了确定片段上间接漫反射光的数量（辐照度），我们获取以表面法线为中心的半球的总辐照度。获取场景辐照度的方法就简化为：</p>
+<p><code>vec3 irradiance = texture(irradianceMap, N);</code></p>
 <p>然后，渲染方程求黎曼和，将方程变成这样</p>
 <p><img src="https://cdn.nlark.com/yuque/__latex/1d7b22677f4bef3cee7680ab72e388f3.svg" srcset="/img/loading.gif" lazyload alt="image"></p>
 <p>代码</p>
@@ -438,6 +437,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2025/01/21/%E5%A4%A7%E6%B0%94%E6%95%A3%E5%B0%84/" title="t1">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">t1</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
