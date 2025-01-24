@@ -26,27 +26,13 @@
 <meta property="og:site_name" content="ScrX-飞的博客">
 <meta property="og:description" content="整理一下PBR的细节，最近在用Opengl完全实现PBR，看了learnopengl和一些知乎高手讲解，理解了一点皮毛，在这总结一下。 直接上图：这张图总结的比较完整也很清晰  PBR分为直接光影响和间接光影响，而直接光就很直接，就受到场景中的光源影响。间接光一般来说就是环境光，learnopengl也只介绍了这个，但是我看其他资料还有GI的影响，也就是来自于其他物体反射的光。所以，我理解的是，直">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/jpeg/38597961/1734085187961-fa871cba-b6e6-465c-89db-9353a0ca0597.jpeg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734418535990-61f3c4a0-0e3a-48a9-b3f2-b611d3a4b837.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/a844d5863bff01e6ce2d14ebfd7e0b47.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/e7366443f7375193fb16f4f65bf8843a.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734425131511-94c297a4-e7aa-4c42-9600-a354b37e0580.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/1d7b22677f4bef3cee7680ab72e388f3.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/de6b358562d11871c8d79efbb6bde6b9.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734600106494-8b9fea9f-8187-441b-b242-6af35abfe5cf.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734600280926-48a8f494-77f4-4b77-aadb-f408fdd1fe0d.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/18e3257df04ebdbfcd299aa0b8424599.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734603011565-9b0bac63-fde9-4c93-8ae1-6a6a99734cb9.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/218be36c81e6e910044e73ce7878d7be.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734603170527-20a283fd-0016-4d62-b9ad-67fc44be7202.png">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/858a349f1065658b73d0ceb352dcc407.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/0615669557de718a8cb6dc4dbf928dc6.svg">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/38597961/1734603447875-e83b3fb0-55f9-4416-92f2-4b8cc79338bf.png">
+<meta property="og:image" content="https://scrx666.github.io/img/pbr.png">
 <meta property="article:published_time" content="2024-12-24T12:11:29.000Z">
-<meta property="article:modified_time" content="2025-01-21T15:04:20.122Z">
+<meta property="article:modified_time" content="2025-01-24T08:03:07.261Z">
 <meta property="article:author" content="jia wenfei">
+<meta property="article:tag" content="Rendering">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/jpeg/38597961/1734085187961-fa871cba-b6e6-465c-89db-9353a0ca0597.jpeg">
+<meta name="twitter:image" content="https://scrx666.github.io/img/pbr.png">
   
   
   
@@ -88,7 +74,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"scrx666.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-17VCMPQQM0"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"scrx666.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-17VCMPQQM0"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"8HYJ3rYygpwEcAcyBNUWT3oo-gzGzoHsz","app_key":"f3f0Tb48nkb8uhgEZqXp8CgF","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -98,6 +84,33 @@
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
   
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-17VCMPQQM0", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-17VCMPQQM0');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+    
+  
+
 
 
   
@@ -210,7 +223,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/pbr.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -256,8 +269,6 @@
     
 
     
-    
-      
     
   </div>
 
@@ -385,6 +396,13 @@
               <div class="post-metas my-3">
   
   
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Rendering/" class="print-no-link">#Rendering</a>
+      
+    </div>
+  
 </div>
 
 
@@ -464,6 +482,28 @@
   
     <article id="comments" lazyload>
       
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"8HYJ3rYygpwEcAcyBNUWT3oo-gzGzoHsz","appKey":"f3f0Tb48nkb8uhgEZqXp8CgF","path":"window.location.pathname","placeholder":"说点什么吧...","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
 
     </article>
   
@@ -568,6 +608,11 @@
     <div class="statistics">
   
   
+
+  
+    
+    
+    
 
   
 
@@ -716,6 +761,8 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

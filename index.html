@@ -63,7 +63,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"scrx666.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-17VCMPQQM0"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"scrx666.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-17VCMPQQM0"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"8HYJ3rYygpwEcAcyBNUWT3oo-gzGzoHsz","app_key":"f3f0Tb48nkb8uhgEZqXp8CgF","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -73,6 +73,33 @@
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
   
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-17VCMPQQM0", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-17VCMPQQM0');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+    
+  
+
 
 
   
@@ -185,7 +212,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/cycle-circle-carriage.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -226,7 +253,13 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2025/01/21/%E5%A4%A7%E6%B0%94%E6%95%A3%E5%B0%84/" target="_self">
+          <img src="/img/1.png" srcset="/img/loading.gif" lazyload alt="大气散射">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
         <a href="/2025/01/21/%E5%A4%A7%E6%B0%94%E6%95%A3%E5%B0%84/" target="_self">
@@ -235,7 +268,7 @@
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/01/21/%E5%A4%A7%E6%B0%94%E6%95%A3%E5%B0%84/" target="_self">
+      <a class="index-excerpt " href="/2025/01/21/%E5%A4%A7%E6%B0%94%E6%95%A3%E5%B0%84/" target="_self">
         <div>
           [散射方程] Scattering Function S定义：波长λ的光，在海拔 ℎ处，散射到 𝜃角度的能量百分比。   1）大气的组成：大气中存在不同的颗粒，有大有小，光线碰到不同颗粒会有不同的散射形式。光线碰到空气中的小颗粒（空气分子）会发生Rayleigh 散射，遇到大颗粒（气溶胶，小分子与其他加大颗粒组成：灰尘等等），发生Mie散射。 2）大气的密度：大气并不是一种均匀的介质，他的密度与
         </div>
@@ -252,6 +285,13 @@
         
         
         
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Rendering/">#Rendering</a>
+            
+          </div>
+        
       </div>
     </article>
   </div>
@@ -259,7 +299,13 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/12/24/PBR/" target="_self">
+          <img src="/img/pbr.png" srcset="/img/loading.gif" lazyload alt="PBR">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
         <a href="/2024/12/24/PBR/" target="_self">
@@ -268,7 +314,7 @@
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/12/24/PBR/" target="_self">
+      <a class="index-excerpt " href="/2024/12/24/PBR/" target="_self">
         <div>
           整理一下PBR的细节，最近在用Opengl完全实现PBR，看了learnopengl和一些知乎高手讲解，理解了一点皮毛，在这总结一下。 直接上图：这张图总结的比较完整也很清晰  PBR分为直接光影响和间接光影响，而直接光就很直接，就受到场景中的光源影响。间接光一般来说就是环境光，learnopengl也只介绍了这个，但是我看其他资料还有GI的影响，也就是来自于其他物体反射的光。所以，我理解的是，直
         </div>
@@ -284,6 +330,13 @@
           </div>
         
         
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Rendering/">#Rendering</a>
+            
+          </div>
         
       </div>
     </article>
@@ -318,38 +371,12 @@
         
         
         
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/11/19/hello-world/" target="_self">
-          Hello World
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/11/19/hello-world/" target="_self">
-        <div>
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-19 23:14" pubdate>
-              2024-11-19
-            </time>
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%9D%82%C2%B7%E7%94%9F%E6%B4%BB/">#杂·生活</a>
+            
           </div>
-        
-        
         
       </div>
     </article>
@@ -412,6 +439,11 @@
   
 
   
+    
+    
+    
+
+  
 
 </div>
 
@@ -465,6 +497,8 @@
 
 
 
+
+  <script defer src="/js/leancloud.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 
