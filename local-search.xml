@@ -5,6 +5,25 @@
   
   <entry>
     <title>大气散射</title>
+    <link href="/2025/02/28/Boids%E9%9B%86%E7%BE%A4%E7%AE%97%E6%B3%95/"/>
+    <url>/2025/02/28/Boids%E9%9B%86%E7%BE%A4%E7%AE%97%E6%B3%95/</url>
+    
+    <content type="html"><![CDATA[<p>首先可以分为三个类，Flock（群），agent(个人代理），Behavior（行为）。其中实现<font style="color:rgb(25, 27, 31);">集群行为最重要的是研究其行为，行为主要分为三个方面：</font><strong><font style="color:rgb(25, 27, 31);">cohesion（凝聚），alignment（对齐），separation（分离）</font></strong><font style="color:rgb(25, 27, 31);">。这些行为都是在一个agent相对于附近的Flock半径内发生，所以将这些行为都应用到当前这个agent身上实现。</font></p><p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1736752315848-4336bac9-83d8-4f6d-a531-fde86ca71956.png"></p><p><font style="color:rgb(25, 27, 31);">那么，最关键的一步就是如何将这些行为应用到每个agent上。实现了两种方法，一种是2D的，一种是3D的。</font></p><p><font style="color:rgb(25, 27, 31);">2D的方法先抽象了一个Behavior类，因为这三种行为无非就是改变当前agent的transform，所以定义了一个抽象方法，然后分别实现三种不同的行为来分别改变这个行为对agent的贡献，最后将所有行为根据权重加起来构建完整的Behavior系统。</font></p><p><font style="color:rgb(25, 27, 31);">（权重没什么特殊的，只是一个用户自己输入的数）</font></p><p><font style="color:rgb(25, 27, 31);">3D的方法则使用了Compute shader运算，在cs中将所有行为计算出来并相加，最后将flock 的direction和position通过RWStructuredBuffer传到shader中用于GPU instance 计算变换矩阵。</font></p><p><font style="color:rgb(25, 27, 31);">至于怎么根据半径确定，首先定义一个半径值，然后根据compute shader中的SV_DispatchThreadID拿到当前线程在所有线程组中的所有线程里的ID，分配为instanceID用来代表当前这个agent。然后在对整个flock遍历时，通过取当前这个agent和flock[i]的距离，判断是否小于半径，才决定是否有接下来的Behavior，最后除以所有半径内的数量加权平均，计算出direction和position并存入RWStructuredBuffer中。</font></p><p><font style="color:rgb(25, 27, 31);">仓库：</font><a href="https://github.com/ScrX666/ComputeShaderFlocking">https://github.com/ScrX666/ComputeShaderFlocking</a></p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>Rendering</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>大气散射</title>
     <link href="/2025/01/21/%E5%A4%A7%E6%B0%94%E6%95%A3%E5%B0%84/"/>
     <url>/2025/01/21/%E5%A4%A7%E6%B0%94%E6%95%A3%E5%B0%84/</url>
     

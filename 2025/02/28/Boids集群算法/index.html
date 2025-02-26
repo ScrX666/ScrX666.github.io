@@ -19,16 +19,16 @@
   <meta name="author" content="jia wenfei">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[散射方程] Scattering Function S定义：波长λ的光，在海拔 ℎ处，散射到 𝜃角度的能量百分比。   1）大气的组成：大气中存在不同的颗粒，有大有小，光线碰到不同颗粒会有不同的散射形式。光线碰到空气中的小颗粒（空气分子）会发生Rayleigh 散射，遇到大颗粒（气溶胶，小分子与其他加大颗粒组成：灰尘等等），发生Mie散射。 2）大气的密度：大气并不是一种均匀的介质，他的密度与">
+    <meta name="description" content="首先可以分为三个类，Flock（群），agent(个人代理），Behavior（行为）。其中实现集群行为最重要的是研究其行为，行为主要分为三个方面：cohesion（凝聚），alignment（对齐），separation（分离）。这些行为都是在一个agent相对于附近的Flock半径内发生，所以将这些行为都应用到当前这个agent身上实现。  那么，最关键的一步就是如何将这些行为应用到每个age">
 <meta property="og:type" content="article">
 <meta property="og:title" content="大气散射">
-<meta property="og:url" content="https://scrx666.github.io/2025/01/21/%E5%A4%A7%E6%B0%94%E6%95%A3%E5%B0%84/index.html">
+<meta property="og:url" content="https://scrx666.github.io/2025/02/28/Boids%E9%9B%86%E7%BE%A4%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="ScrX-飞的博客">
-<meta property="og:description" content="[散射方程] Scattering Function S定义：波长λ的光，在海拔 ℎ处，散射到 𝜃角度的能量百分比。   1）大气的组成：大气中存在不同的颗粒，有大有小，光线碰到不同颗粒会有不同的散射形式。光线碰到空气中的小颗粒（空气分子）会发生Rayleigh 散射，遇到大颗粒（气溶胶，小分子与其他加大颗粒组成：灰尘等等），发生Mie散射。 2）大气的密度：大气并不是一种均匀的介质，他的密度与">
+<meta property="og:description" content="首先可以分为三个类，Flock（群），agent(个人代理），Behavior（行为）。其中实现集群行为最重要的是研究其行为，行为主要分为三个方面：cohesion（凝聚），alignment（对齐），separation（分离）。这些行为都是在一个agent相对于附近的Flock半径内发生，所以将这些行为都应用到当前这个agent身上实现。  那么，最关键的一步就是如何将这些行为应用到每个age">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://scrx666.github.io/img/1.png">
-<meta property="article:published_time" content="2025-01-21T15:05:07.000Z">
-<meta property="article:modified_time" content="2025-01-24T07:58:53.901Z">
+<meta property="article:published_time" content="2025-02-27T16:01:07.000Z">
+<meta property="article:modified_time" content="2025-02-26T16:04:43.956Z">
 <meta property="article:author" content="jia wenfei">
 <meta property="article:tag" content="Rendering">
 <meta name="twitter:card" content="summary_large_image">
@@ -240,8 +240,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-01-21 23:05" pubdate>
-          2025年1月21日 晚上
+        <time datetime="2025-02-28 00:01" pubdate>
+          2025年2月28日 凌晨
         </time>
       </span>
     
@@ -252,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          422 字
         
       </span>
     
@@ -263,7 +263,7 @@
         
         
         
-          11 分钟
+          4 分钟
         
       </span>
     
@@ -305,73 +305,14 @@
             
               <div class="markdown-body">
                 
-                <h1 id="散射方程-Scattering-Function-S"><a href="#散射方程-Scattering-Function-S" class="headerlink" title="[散射方程] Scattering Function S"></a>[<font style="color:rgb(25, 27, 31);">散射方程</font>]<font style="color:rgb(25, 27, 31);"> Scattering Function S</font></h1><p><strong>定义：</strong>波长λ的光，在海拔 ℎ处，散射到 𝜃角度的能量百分比。  </p>
-<p><font style="color:rgb(25, 27, 31);">1）大气的组成：大气中存在不同的颗粒，有大有小，光线碰到不同颗粒会有不同的散射形式。光线碰到空气中的</font><strong><font style="color:rgb(25, 27, 31);">小颗粒</font></strong><font style="color:rgb(25, 27, 31);">（空气分子）会发生Rayleigh 散射，遇到</font><strong><font style="color:rgb(25, 27, 31);">大颗粒</font></strong><font style="color:rgb(25, 27, 31);">（气溶胶，小分子与其他加大颗粒组成：灰尘等等），发生Mie散射。</font></p>
-<p><font style="color:rgb(25, 27, 31);">2）大气的密度：大气并不是一种均匀的介质，他的密度与海拔有关系。密度越大地方，散射程度越强。</font></p>
-<p><font style="color:rgb(25, 27, 31);">散射方程S相关变量参数：</font><img src="https://cdn.nlark.com/yuque/__latex/10a0f76b4b67b6fbac7eb5d685051ee0.svg" srcset="/img/loading.gif" lazyload alt="image">  </p>
-<p><strong><font style="color:rgb(25, 27, 31);">Rayleigh 的散射方程</font></strong></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737429686257-b30eb6d9-5784-4c0d-a089-711a977665ba.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="散射系数-Scattering-Cefficient-β"><a href="#散射系数-Scattering-Cefficient-β" class="headerlink" title="[散射系数] Scattering Cefficient β"></a>[<font style="color:rgb(25, 27, 31);">散射系数</font>]<font style="color:rgb(25, 27, 31);"> Scattering Cefficient β</font></h1><p><strong>定义：</strong>散射到某方向的百分比，更准确地说散射系数描述了光散射后的能量损失百分比  </p>
-<p>散射系数相关变量参数<img src="https://cdn.nlark.com/yuque/__latex/ac32e983a893496ad4807e4b8a912135.svg" srcset="/img/loading.gif" lazyload alt="image"></p>
-<p><font style="color:rgb(36, 41, 46);">散射系数</font><strong><font style="color:rgb(36, 41, 46);">只和波长、海拔高度有关</font></strong><font style="color:rgb(36, 41, 46);">，与方向无关</font></p>
-<h2 id="Rayleigh-的散射系数"><a href="#Rayleigh-的散射系数" class="headerlink" title="Rayleigh 的散射系数"></a><font style="color:rgb(25, 27, 31);">Rayleigh 的散射系数</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737429965086-4c529c74-5441-4a66-a439-a95b00a9d640.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="Mie-散射系数"><a href="#Mie-散射系数" class="headerlink" title="Mie 散射系数"></a><font style="color:rgb(25, 27, 31);">Mie 散射系数</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737429993688-f07d3532-e379-4523-a084-405e4e7e805c.png" srcset="/img/loading.gif" lazyload></p>
-<p><font style="color:rgb(25, 27, 31);">两种散射的密度函数是不同的，瑞丽是𝜌</font><em><font style="color:rgb(25, 27, 31);">r（h）</font></em><font style="color:rgb(25, 27, 31);">，米氏是𝜌</font><em><font style="color:rgb(25, 27, 31);">m（h）</font></em></p>
-<h2 id="简化"><a href="#简化" class="headerlink" title="简化"></a><font style="color:rgb(25, 27, 31);">简化</font></h2><h3 id="Rayleigh"><a href="#Rayleigh" class="headerlink" title="Rayleigh"></a><font style="color:rgb(25, 27, 31);">Rayleigh</font></h3><p>通常在简化时，需要把散射系数分为 **𝛽 ( 𝜆 ) 𝜌 ( ℎ )**，其中 𝛽 ( 𝜆 ) 表示海拔高度为0的散射系数，即</p>
-<p> <img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737430317726-054a85de-cd87-4624-a99a-4b4d036211eb.png" srcset="/img/loading.gif" lazyload></p>
-<p>这样拆开后，前面的𝛽 ( 𝜆 ) 就是一个常数，CPU提前传给GPU，只需要计算 𝜌 ( ℎ )即可。</p>
-<h3 id="Mie"><a href="#Mie" class="headerlink" title="Mie"></a>Mie</h3><p>米氏散射的𝛽 ( 𝜆 )部分也是一个常数，<font style="color:rgb(25, 27, 31);">Henyey-Greenstein 曾预估过它的值：</font><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737430624798-963a75f1-4db9-431b-a763-aeb841d9c4de.png" srcset="/img/loading.gif" lazyload></p>
-<p>因此根据波长，（<font style="color:rgb(25, 27, 31);">440、550、680nm 表示的红绿蓝光的波长）</font>可以得到常数项<img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737430675650-aa8041b3-4a00-468d-acc6-93c8a48e637b.png" srcset="/img/loading.gif" lazyload><br>这样就只剩**𝜌 ( ℎ )**了</p>
-<h1 id="相位方程-Phase-Function-γ"><a href="#相位方程-Phase-Function-γ" class="headerlink" title="相位方程 Phase Function γ"></a><font style="color:rgb(25, 27, 31);">相位方程 Phase Function γ</font></h1><p><strong>定义：</strong><font style="color:rgb(36, 41, 46);">指定方向占散射方向的百分比</font></p>
-<p>主要形式：γ(θ)，（这个符号叫gamma）</p>
-<h2 id="Rayleigh-1"><a href="#Rayleigh-1" class="headerlink" title="Rayleigh"></a>Rayleigh</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737431170945-22b6278e-e009-4e09-8a03-79dfd169c620.png" srcset="/img/loading.gif" lazyload></p>
-<p>根据该函数不难看出，<strong>光线很难沿着90°方向散射，很容易沿着原方向或反方向散射</strong></p>
-<h2 id="Mie-1"><a href="#Mie-1" class="headerlink" title="Mie"></a>Mie</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737431290392-509d8a9c-2997-4cba-b7c3-7066ca02b328.png" srcset="/img/loading.gif" lazyload></p>
-<p>几何意义</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737431388894-b2342fd4-3da4-440d-821e-0a54e0f405a0.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="大气密度比例函数-Atmospheric-Density-Ratio-ρ"><a href="#大气密度比例函数-Atmospheric-Density-Ratio-ρ" class="headerlink" title="大气密度比例函数 Atmospheric Density Ratio ρ"></a>大气密度比例函数 <font style="color:rgb(25, 27, 31);">Atmospheric Density Ratio ρ</font></h1><p><strong>定义：</strong><font style="color:rgb(36, 41, 46);">海拔为h处的大气密度和</font><strong><font style="color:rgb(36, 41, 46);">海平面处</font></strong><font style="color:rgb(36, 41, 46);">的大气密度的比值。</font></p>
-<p><font style="color:rgb(36, 41, 46);">形式：</font>** **<img src="https://cdn.nlark.com/yuque/__latex/372c146d83ff9fed256f0a21e9fa4e64.svg" srcset="/img/loading.gif" lazyload alt="image"><br>density(0)可以测算出来，但 density(h)需要计算且难度不小，因为大气的组成非常复杂，由不同压力、密度、温度的几层组成。好在瑞丽散射和米氏散射发生在较低的大气层，在这里大气密度随着高度指数衰减，可以使用一条曲线近似模拟density(h)  .</p>
-<p><font style="color:rgb(25, 27, 31);">真正在计算的时候，用到的 </font><font style="color:rgb(25, 27, 31);">ρ(h)</font><font style="color:rgb(25, 27, 31);"> 是个近似值，近视值为</font></p>
-<p><img src="https://cdn.nlark.com/yuque/__latex/665b59be30c687d93a73951ddcb78f46.svg" srcset="/img/loading.gif" lazyload alt="image"></p>
-<p><font style="color:rgb(25, 27, 31);">这里又引入了一个H，这个H 是个啥？</font></p>
-<p><font style="color:rgb(25, 27, 31);">答：是个常量，通常称它为”</font><strong><font style="color:rgb(25, 27, 31);">scale height</font></strong><font style="color:rgb(25, 27, 31);">“，相当于是一个基准的高度。对于Rayleigh 来说，H&#x3D; 8500米。对于Mie 来说，H &#x3D; 1200米。</font></p>
-<h1 id="指数衰减-Exponential-Decay"><a href="#指数衰减-Exponential-Decay" class="headerlink" title="[指数衰减] Exponential Decay"></a>[<font style="color:rgb(25, 27, 31);">指数衰减</font>] <font style="color:rgb(25, 27, 31);">Exponential Decay</font></h1><p><strong>定义：</strong>在散射系数β的<strong>均匀介质</strong>中，经过距离x在入射方向上还剩余的能量。</p>
-<p>形式：<img src="https://cdn.nlark.com/yuque/__latex/9e5b2f539ea645d8955fac3a3f63f53b.svg" srcset="/img/loading.gif" lazyload alt="image"></p>
-<p>推导过程：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737443377032-3ea02f70-fc28-460e-b987-d94886d4d922.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="大气透射率-Atmospheric-Transmittance"><a href="#大气透射率-Atmospheric-Transmittance" class="headerlink" title="[大气透射率] Atmospheric Transmittance"></a>[<font style="color:rgb(25, 27, 31);">大气透射率</font>] <font style="color:rgb(25, 27, 31);">Atmospheric Transmittance</font></h1><p><strong>定义：</strong><font style="color:rgb(36, 41, 46);">光线在大气中行进一段距离后， </font><strong><font style="color:rgb(36, 41, 46);">剩余的能量百分比</font></strong><font style="color:rgb(36, 41, 46);">。</font></p>
-<p><font style="color:rgb(36, 41, 46);">形式：</font><img src="https://cdn.nlark.com/yuque/__latex/9aec2e0c42af938cf36d9d823fd2020f.svg" srcset="/img/loading.gif" lazyload alt="image"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737444391104-b6165d99-3890-45db-80db-1b516929d84b.png" srcset="/img/loading.gif" lazyload></p>
-<p>因为大气并不都是均匀介质，在经过大气层时，会穿过许多β不同的值。因为β中的ρ会随高度的变化而变化。</p>
-<p><strong><font style="color:rgb(25, 27, 31);">推导过程:(Is就是Ic）</font></strong></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737444628216-2ca1fd3d-a48a-49fb-9aeb-0b139d23b236.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="优化方程"><a href="#优化方程" class="headerlink" title="优化方程"></a>优化方程</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737445425437-093e26fa-9e9d-4e42-b402-eee13226f38b.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="光学深度-OpticalDepth"><a href="#光学深度-OpticalDepth" class="headerlink" title="光学深度 OpticalDepth"></a>光学深度 <font style="color:rgb(25, 27, 31);">OpticalDepth</font></h1><p>根据透射率方程的后半部分，被称为Dcp项，因为他是一个累加项。</p>
-<p><font style="color:rgb(25, 27, 31);">它表示的是，一段距离上， 大气密度比例 </font><font style="color:rgb(25, 27, 31);">ρ(h)</font><font style="color:rgb(25, 27, 31);"> 的累积。</font></p>
-<p><font style="color:rgb(25, 27, 31);">就是把一段路径，分成n 个点，对每个点求它的 大气密度比例，然后累加。相当于做Raymarching。</font></p>
-<p><font style="color:rgb(25, 27, 31);">所以总结一下：</font><img src="https://cdn.nlark.com/yuque/__latex/cce3944ec86f887822bf805420d5a380.svg" srcset="/img/loading.gif" lazyload alt="image"></p>
-<h1 id="最终公式推导"><a href="#最终公式推导" class="headerlink" title="最终公式推导"></a>最终公式推导</h1><p>光源从C点进入大气到达视线A点。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737446583448-fd78badb-2c6c-48e5-89f2-99b4d93825e3.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737446977291-e7690c7b-1595-4fde-aefd-0531d3e922db.png" srcset="/img/loading.gif" lazyload></p>
-<p><font style="color:rgb(25, 27, 31);">因为在AB 路径上，有 路径上，有无数个点P， 都在发生类似的散射。</font></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737447287883-35745a7d-0ae7-40e0-87dd-b75fbb408d7e.png" srcset="/img/loading.gif" lazyload></p>
-<p>就有<img src="https://cdn.nlark.com/yuque/__latex/55401d980e9487f31b53a8341d292c10.svg" srcset="/img/loading.gif" lazyload alt="image"></p>
-<p>因此带入得到最终方程</p>
-<p><img src="https://cdn.nlark.com/yuque/__latex/870d4eed6e159cb35ca0675ca2d8e94c.svg" srcset="/img/loading.gif" lazyload alt="image"></p>
-<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737447802765-072b4904-8318-46e4-84bc-606b9fa1c015.png" srcset="/img/loading.gif" lazyload><br>因为 𝛽 ( 𝜆 ) 表示散射系数，与海拔高度无关，是个常量，且 𝛾 ( 𝜃 ) 表示相位函数，是个常量。所以可以将 𝛽 ( 𝜆 ) 𝛾 ( 𝜃 ) 这两货从散射方程中提出来，可得</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737447963833-d845a0c7-9eaf-4e31-b435-2ed510867d7b.png" srcset="/img/loading.gif" lazyload></p>
-<p>因此就剩下Tcp和Tpa了，在大气透射率中提到</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448219257-e11948b9-271d-4381-a268-84f2caee9724.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448251875-1e19b14b-f08a-4bf8-972c-4f70e44eede3.png" srcset="/img/loading.gif" lazyload></p>
-<p>所以得到优化后的最后方程</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448368995-b3ab6e52-0065-4b6f-b199-5f5d15a193ba.png" srcset="/img/loading.gif" lazyload alt="最后方程"></p>
-<p>根据这个方程可以将其分为两部分，一部分是常量，由CPU端提前传入；另一部分是需要实时计算的 真正需要优化的是需要实时计算的部分，</p>
-<p>目前存在三个积分项 </p>
-<p>第一个积分：视线AB上存在许多颗粒产生散射 </p>
-<p>第二个积分：大气透射率，OpticalDepth CP （DCP）</p>
-<p>第三个积分：大气透射率，OpticalDepth PA （DPA）</p>
-<p>说人话就是取AB上的一个颗粒点P，计算CP的大气透射率进并累加，再计算PA的大气透射率并累加，并计算AB上其他所有的颗粒 </p>
-<p>这里还可以进一步优化为两个积分，也就是优化 𝐷 ( 𝑃 𝐴 )，因为点P是在AB上的，那么上一次积分得到的 <img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448543916-c981c1a7-1c19-4919-9a84-ecb7d103fd3d.png" srcset="/img/loading.gif" lazyload>，可以直接用于下次积分 <img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1737448554528-83b6e917-f1f6-469e-9f1b-87241eb601fd.png" srcset="/img/loading.gif" lazyload></p>
+                <p>首先可以分为三个类，Flock（群），agent(个人代理），Behavior（行为）。其中实现<font style="color:rgb(25, 27, 31);">集群行为最重要的是研究其行为，行为主要分为三个方面：</font><strong><font style="color:rgb(25, 27, 31);">cohesion（凝聚），alignment（对齐），separation（分离）</font></strong><font style="color:rgb(25, 27, 31);">。这些行为都是在一个agent相对于附近的Flock半径内发生，所以将这些行为都应用到当前这个agent身上实现。</font></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/38597961/1736752315848-4336bac9-83d8-4f6d-a531-fde86ca71956.png" srcset="/img/loading.gif" lazyload></p>
+<p><font style="color:rgb(25, 27, 31);">那么，最关键的一步就是如何将这些行为应用到每个agent上。实现了两种方法，一种是2D的，一种是3D的。</font></p>
+<p><font style="color:rgb(25, 27, 31);">2D的方法先抽象了一个Behavior类，因为这三种行为无非就是改变当前agent的transform，所以定义了一个抽象方法，然后分别实现三种不同的行为来分别改变这个行为对agent的贡献，最后将所有行为根据权重加起来构建完整的Behavior系统。</font></p>
+<p><font style="color:rgb(25, 27, 31);">（权重没什么特殊的，只是一个用户自己输入的数）</font></p>
+<p><font style="color:rgb(25, 27, 31);">3D的方法则使用了Compute shader运算，在cs中将所有行为计算出来并相加，最后将flock 的direction和position通过RWStructuredBuffer传到shader中用于GPU instance 计算变换矩阵。</font></p>
+<p><font style="color:rgb(25, 27, 31);">至于怎么根据半径确定，首先定义一个半径值，然后根据compute shader中的SV_DispatchThreadID拿到当前线程在所有线程组中的所有线程里的ID，分配为instanceID用来代表当前这个agent。然后在对整个flock遍历时，通过取当前这个agent和flock[i]的距离，判断是否小于半径，才决定是否有接下来的Behavior，最后除以所有半径内的数量加权平均，计算出direction和position并存入RWStructuredBuffer中。</font></p>
+<p><font style="color:rgb(25, 27, 31);">仓库：</font><a target="_blank" rel="noopener" href="https://github.com/ScrX666/ComputeShaderFlocking">https://github.com/ScrX666/ComputeShaderFlocking</a></p>
 
                 
               </div>
@@ -397,7 +338,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>大气散射</div>
-      <div>https://scrx666.github.io/2025/01/21/大气散射/</div>
+      <div>https://scrx666.github.io/2025/02/28/Boids集群算法/</div>
     </div>
     <div class="license-meta">
       
@@ -409,7 +350,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年1月21日</div>
+          <div>2025年2月28日</div>
         </div>
       
       
@@ -441,18 +382,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/02/28/Boids%E9%9B%86%E7%BE%A4%E7%AE%97%E6%B3%95/" title="大气散射">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">大气散射</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/12/24/PBR/" title="PBR">
-                        <span class="hidden-mobile">PBR</span>
+                      <a href="/2025/01/21/%E5%A4%A7%E6%B0%94%E6%95%A3%E5%B0%84/" title="大气散射">
+                        <span class="hidden-mobile">大气散射</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
